@@ -1,6 +1,9 @@
 import './styles/reset.scss'
 import './styles/index.scss'
-import init from './game/init'
+import bindEvent from './events'
 
-init()
+import './images/qr_code.png'
+
+
+bindEvent()
 

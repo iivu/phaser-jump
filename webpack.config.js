@@ -9,6 +9,10 @@ const extractSass = new ExtractTextPlugin({
   disable: process.env.NODE_ENV === 'development'
 })
 
+const MODE = process.env.MODE
+
+const publicPath = MODE === 'dev' ? '/' : 'http://img.cntapp.com/h5/zze/jump/'
+
 module.exports = {
   entry: {
     vendor: Object.keys(packageJson.dependencies),
@@ -17,8 +21,7 @@ module.exports = {
   output: {
     filename: '[name].js?[hash:5]',
     path: path.resolve(__dirname, 'dist'),
-    //publicPath: "http://img.cntapp.com/h5/zze/huarongpan/"
-    publicPath: '/'
+    publicPath,
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),

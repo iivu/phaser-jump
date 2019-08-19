@@ -4,9 +4,9 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "MODE=prod webpack",
     "watch": "webpack --watch",
-    "start": "node_modules/.bin/webpack-dev-server"
+    "start": "MODE=dev node_modules/.bin/webpack-dev-server"
   },
   "author": "",
   "license": "ISC",

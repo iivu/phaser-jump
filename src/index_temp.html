@@ -2,20 +2,163 @@
 <html lang="zh">
   <head>
     <meta charset="UTF-8">
-<!--    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">-->
-    <meta id="vpt" name="viewport" content="width=750, user-scalable=no">
+    <!--    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">-->
+    <meta name="viewport" content="width=750, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>demo</title>
+    <title>跳一跳</title>
   </head>
   <body>
 
-    <div id="container">
-
-      <div id="game-wrap">
-
+    <div class="home full-page">
+      <div class="status-bar">
+        <div class="life-bar">3</div>
+        <div class="score-bar">1321</div>
+        <div class="rules-bar"></div>
       </div>
+      <div class="main-image">
+        <div class="player"></div>
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+        <div class="cloud c3"></div>
+      </div>
+      <div class="start-btn"></div>
+      <div class="action-btn-wrap">
+        <div class="action-btn voice"></div>
+        <div class="action-btn rank"></div>
+        <div class="action-btn gift"></div>
+        <div class="action-btn share"></div>
+      </div>
+    </div>
+
+    <div class="game-rules-modal full-page modal hide">
+      <div class="wrap">
+        <div class="example">
+          <div class="player"></div>
+          <div class="cloud"></div>
+        </div>
+        <div class="rules-content">
+          <div class="finger"></div>
+          <div>
+            <div>长按屏幕</div>
+            <div>进行跳动</div>
+          </div>
+        </div>
+        <div class="know-btn"></div>
+      </div>
+    </div>
+
+    <div class="rules-modal full-page modal hide">
+      <div class="wrap">
+        <div class="title">活动规则</div>
+        <div class="content">
+          <div>1、活动时间：2019年8月23-2019年9月1日</div>
+          <div>2、每个用户每天3次机会，分享一次可以额外获得2次机会。</div>
+          <div>3、每跳一个城市以1积分累加，如第一个城市1积分，第二个城市2积分不断累加。</div>
+          <div>4、活动截止后所有用户通过游戏获得的积分可以通过关注“集合时”公众号，今日积分商城兑换礼券（积分商城上线时间请关注公众号），游戏第一名有机会获得免费游。</div>
+        </div>
+        <div class="x"></div>
+      </div>
+    </div>
+
+    <div class="rank-gift-modal full-page modal hide">
+      <div class="wrap">
+        <div class="tab-wrap">
+          <div class="tab active">排行榜</div>
+          <div class="tab">我的奖品</div>
+        </div>
+        <div class="rank hide">
+          <div class="rank-item">
+            <div class="rank-num first">1</div>
+            <div class="info">我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我</div>
+            <div class="score">123231</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num"></div>
+            <div class="info"></div>
+            <div class="score"></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num"></div>
+            <div class="info"></div>
+            <div class="score"></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num"></div>
+            <div class="info"></div>
+            <div class="score"></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num"></div>
+            <div class="info"></div>
+            <div class="score"></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num"></div>
+            <div class="info"></div>
+            <div class="score"></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num"></div>
+            <div class="info"></div>
+            <div class="score"></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num"></div>
+            <div class="info"></div>
+            <div class="score"></div>
+          </div>
+        </div>
+        <div class="gift">
+          <div class="gift-item-wrap">
+            <div class="gift-item">
+              <div class="gift-icon"></div>
+              <div>旅游套餐省内旅行5折券</div>
+            </div>
+            <div class="gift-item">
+              <div class="gift-icon"></div>
+              <div>旅游套餐省内旅行5折券</div>
+            </div>
+          </div>
+          <div class="qr-code-wrap">
+            <img src="./images/qr_code.png" alt="qr-code" class="qr-code">
+            <div>关注公众号兑换奖品</div>
+          </div>
+        </div>
+        <div class="x"></div>
+      </div>
+    </div>
+
+    <div class="result-modal modal full-page hide">
+      <div class="wrap">
+        <div class="current-score">您获得50积分</div>
+        <div class="total-score">您当前总积分：120</div>
+        <div class="action-wrap">
+          <div class="rank-action"></div>
+          <div class="share-action"></div>
+          <div class="again-action"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-chance-modal modal full-page hide">
+      <div class="wrap">
+        <div class="no-chance-tips">您的游戏机会已用完</div>
+        <div class="action-wrap">
+          <div class="rank-action"></div>
+          <div class="share-action"></div>
+          <div class="again-action"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="share-modal modal full-page hide">
+      <div class="share-content"></div>
+    </div>
+
+    <div id="game-wrap" class="hide">
 
     </div>
 
   </body>
 </html>
+
