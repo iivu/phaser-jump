@@ -50,7 +50,7 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel-loader?presets[]=es2015'
     }, {
-      test: /\.(png|jpe?g|gif|svg)$/,
+      test: /\.(png|jpe?g|gif|svg|mp3)$/,
       use: [
         'url-loader?name=images/[name].[ext]?[hash:5]&limit=100'
       ]

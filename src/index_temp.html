@@ -9,12 +9,14 @@
   </head>
   <body>
 
+    <div class="status-bar">
+      <div class="life-bar">0</div>
+      <div class="score-bar">0</div>
+      <div class="rules-bar"></div>
+      <div class="voice-bar active hide"></div>
+    </div>
+
     <div class="home full-page">
-      <div class="status-bar">
-        <div class="life-bar">3</div>
-        <div class="score-bar">1321</div>
-        <div class="rules-bar"></div>
-      </div>
       <div class="main-image">
         <div class="player"></div>
         <div class="cloud c1"></div>
@@ -26,7 +28,7 @@
         <div class="action-btn voice"></div>
         <div class="action-btn rank"></div>
         <div class="action-btn gift"></div>
-        <div class="action-btn share"></div>
+        <div class="action-btn share share-btn"></div>
       </div>
     </div>
 
@@ -130,11 +132,11 @@
 
     <div class="result-modal modal full-page hide">
       <div class="wrap">
-        <div class="current-score">您获得50积分</div>
-        <div class="total-score">您当前总积分：120</div>
+        <div class="current-score">您获得积分</div>
+        <div class="total-score">您当前总积分：</div>
         <div class="action-wrap">
           <div class="rank-action"></div>
-          <div class="share-action"></div>
+          <div class="share-action share-btn"></div>
           <div class="again-action"></div>
         </div>
       </div>
@@ -155,9 +157,19 @@
       <div class="share-content"></div>
     </div>
 
-    <div id="game-wrap" class="hide">
-
+    <div class="mobile-auto-modal modal full-page hide">
+      <div class="wrap">
+        <div class="input-wrap">
+          <input type="tel" placeholder="请输入您的手机号" class="auth-tel-input">
+        </div>
+        <div class="entry-btn"></div>
+        <div class="x"></div>
+      </div>
     </div>
+
+    <div id="game-wrap" class="hide"></div>
+
+    <audio src="http://img.cntapp.com/h5/zze/jump/bgm.mp3" loop class="bgm" autoplay></audio>
 
   </body>
 </html>

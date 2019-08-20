@@ -20,7 +20,7 @@ const GAME_CONFIG = {
     default: 'arcade',
     arcade: {
       gravity: { y: 1500 },
-      debug: true
+      debug: false
     }
   },
 }
@@ -28,7 +28,6 @@ const GAME_CONFIG = {
 function init() {
 
   game = new Phaser.Game(GAME_CONFIG)
-  console.log(game)
 
 }
 

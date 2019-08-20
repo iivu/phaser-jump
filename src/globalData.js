@@ -1,9 +1,9 @@
 const globalData = {
 
-  chance: 0,
+  chance: 3,
+  totalScore: 0,
 
 }
-
 
 export function set(key, value) {
 
