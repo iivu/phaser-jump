@@ -44,6 +44,7 @@ export default {
     this.load.image('c35', require('../images/c35.png'))
     this.load.image('c36', require('../images/c36.png'))
     this.load.image('c37', require('../images/c37.png'))
+    this.load.image('plane', require('../images/plane.png'))
   },
 
   create: function () {

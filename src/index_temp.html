@@ -9,14 +9,16 @@
   </head>
   <body>
 
-    <div class="status-bar">
-      <div class="life-bar">0</div>
-      <div class="score-bar">0</div>
-      <div class="rules-bar"></div>
-      <div class="voice-bar active hide"></div>
+    <div class="status-bar-wrap hide">
+      <div class="status-bar">
+        <div class="life-bar">0</div>
+        <div class="score-bar">0</div>
+        <div class="rules-bar"></div>
+        <div class="voice-bar active hide"></div>
+      </div>
     </div>
 
-    <div class="home full-page">
+    <div class="home full-page hide">
       <div class="main-image">
         <div class="player"></div>
         <div class="cloud c1"></div>
@@ -65,52 +67,11 @@
     <div class="rank-gift-modal full-page modal hide">
       <div class="wrap">
         <div class="tab-wrap">
-          <div class="tab active">排行榜</div>
-          <div class="tab">我的奖品</div>
+          <div class="tab active rank-tab">排行榜</div>
+          <div class="tab gift-tab">我的奖品</div>
         </div>
-        <div class="rank hide">
-          <div class="rank-item">
-            <div class="rank-num first">1</div>
-            <div class="info">我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我</div>
-            <div class="score">123231</div>
-          </div>
-          <div class="rank-item">
-            <div class="rank-num"></div>
-            <div class="info"></div>
-            <div class="score"></div>
-          </div>
-          <div class="rank-item">
-            <div class="rank-num"></div>
-            <div class="info"></div>
-            <div class="score"></div>
-          </div>
-          <div class="rank-item">
-            <div class="rank-num"></div>
-            <div class="info"></div>
-            <div class="score"></div>
-          </div>
-          <div class="rank-item">
-            <div class="rank-num"></div>
-            <div class="info"></div>
-            <div class="score"></div>
-          </div>
-          <div class="rank-item">
-            <div class="rank-num"></div>
-            <div class="info"></div>
-            <div class="score"></div>
-          </div>
-          <div class="rank-item">
-            <div class="rank-num"></div>
-            <div class="info"></div>
-            <div class="score"></div>
-          </div>
-          <div class="rank-item">
-            <div class="rank-num"></div>
-            <div class="info"></div>
-            <div class="score"></div>
-          </div>
-        </div>
-        <div class="gift">
+        <div class="rank content hide"></div>
+        <div class="gift content hide">
           <div class="gift-item-wrap">
             <div class="gift-item">
               <div class="gift-icon"></div>
@@ -126,7 +87,7 @@
             <div>关注公众号兑换奖品</div>
           </div>
         </div>
-        <div class="x"></div>
+        <div class="close"></div>
       </div>
     </div>
 
@@ -147,9 +108,10 @@
         <div class="no-chance-tips">您的游戏机会已用完</div>
         <div class="action-wrap">
           <div class="rank-action"></div>
-          <div class="share-action"></div>
+          <div class="share-action share-btn"></div>
           <div class="again-action"></div>
         </div>
+        <div class="x"></div>
       </div>
     </div>
 
@@ -169,7 +131,24 @@
 
     <div id="game-wrap" class="hide"></div>
 
-    <audio src="http://img.cntapp.com/h5/zze/jump/bgm.mp3" loop class="bgm" autoplay></audio>
+    <div class="loading-modal hide">
+      <div class="loading-wrap">
+        <i class="loading-icon"></i>
+        <p>加载中...</p>
+      </div>
+    </div>
+
+    <audio src="http://img.cntapp.com/h5/zze/jump/bgm.mp3" loop class="bgm"></audio>
+
+    <script>
+      var wxShare = {
+        img_url: 'http://img.cntapp.com/h5/zze/jump/share_image.jpeg',
+        link: 'http://h5.bukeyi.net/h5/zze/jump/index.html',
+        title: '跳一跳',
+        desc: '跳一跳'
+      }
+    </script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
   </body>
 </html>

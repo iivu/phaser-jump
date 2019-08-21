@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import $ from 'jquery'
 import { WIN_WIDTH, WIN_HEIGHT } from './init'
 import { get, set } from '../globalData'
-
+import { postScore } from '../utils'
 
 const NORMAL_PLATFORM = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7']
 const SPECIAL_PLATFORM = {
@@ -60,6 +60,9 @@ let score = 0
 let isJumping = false
 let growPowerAudio = null
 let jumpAudio = null
+let isPostScore = false
+let plane = null
+let planeDirection = 1
 
 //热气球和云碰撞回调
 function onPlayAndPlatformsCollider(player, platform, ctx) {
@@ -67,6 +70,7 @@ function onPlayAndPlatformsCollider(player, platform, ctx) {
   //如果跳到新的云
   if (player.body.touching.down) isJumping = false
   if ((platform.__id !== currentPlatformId) && player.body.touching.down) {
+    if(platformCount % 7 === 0) tweenPlane(ctx)
     //记录当前云的id
     currentPlatformId = platform.__id
     //反转跳跃x速度方向
@@ -126,12 +130,14 @@ function movePlatformAndBackground(ctx) {
   player.body.allowGravity = false
   platforms.children.iterate(platform => {
     ctx.tweens.add({
+      ease: 'Quart.easeOut',
       targets: platform,
       y: platform.y + distance,
       duration: 300,
     })
   })
   ctx.tweens.add({
+    ease: 'Quart.easeOut',
     targets: player,
     y: player.y + distance,
     duration: 300,
@@ -222,6 +228,9 @@ function resetGameData() {
   nextScore = 1
   score = 0
   isJumping = false
+  growPowerAudio = null
+  jumpAudio = null
+  isPostScore = false
 }
 
 function showResult() {
@@ -230,12 +239,31 @@ function showResult() {
   $('.result-modal').show()
 }
 
+function tweenPlane(ctx) {
+  const randomY = Phaser.Math.Between(300, 500)
+  plane.setPosition(
+    planeDirection < 0 ? -300 : WIN_HEIGHT + 300,
+    randomY,
+  )
+  ctx.tweens.add({
+    targets: plane,
+    x: planeDirection < 0 ? WIN_HEIGHT + 300 : -300,
+    y: plane.y + 300,
+    duration: 3000,
+    onComplete: () => {
+      planeDirection *= -1
+      plane.setFlipX(planeDirection < 0)
+    }
+  })
+}
+
 export default {
 
   key: 'gameScene',
 
   create: function () {
     background = this.add.image(0, WIN_HEIGHT, 'bg').setOrigin(0, 1)
+    plane = this.add.image(WIN_WIDTH + 400, 600, 'plane')
     platforms = this.physics.add.group()
     for (let i = 0; i < 6; i += 1) {
       createPlatform(i === 0, this)
@@ -276,25 +304,20 @@ export default {
   update: function () {
     //出界
     if (player.y > WIN_HEIGHT - 60 || player.y < -100 || player.x > WIN_WIDTH + 100 || player.x < -100) {
-      if (get('chance') > 0) {
-        reduceGameChance()
-        if (get('chance') > 0) {
-          player.setVelocity(0, -100)
-          player.setPosition(
-            currentPlayerPos[0] - (50 * velocityXDirection),
-            currentPlayerPos[1]
-          )
-        } else {
-          this.input.removeAllListeners()
+      this.scene.pause()
+      this.input.removeAllListeners()
+      if (!isPostScore) {
+        isPostScore = true
+        postScore(score, () => {
+          reduceGameChance()
           setTimeout(() => {
             showResult()
             resetGameData()
             this.scene.start('overScene')
           }, 500)
-        }
+        })
       }
     }
   },
 
 }
-
