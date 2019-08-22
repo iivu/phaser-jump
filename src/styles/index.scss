@@ -187,6 +187,7 @@ body, html {
         width: 93px;
         height: 109px;
         @include set-full-page-bg('../images/home_icon1_off.png');
+
         &.active {
           width: 93px;
           height: 109px;
@@ -333,6 +334,7 @@ body, html {
       height: 550px;
       overflow: scroll;
       -webkit-overflow-scrolling: touch;
+
       .rank-item {
         width: 100%;
         height: 58px;
@@ -594,7 +596,9 @@ body, html {
   width: 100%;
   height: 100%;
   position: fixed;
-  z-index: 9999;
+  z-index: 99999;
+  top: 0;
+  left: 0;
 
   .loading-wrap {
     width: 200px;

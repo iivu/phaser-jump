@@ -67,7 +67,7 @@ export function inputBlurBugFix() {
 
 export function checkResIsValid(res) {
   if (res.code === 10103 || res.code === 10108) {
-    window.location = `http://h5.hnliantong.cn/mini/authorize/index?callback=${encodeURIComponent(window.location.href)}`
+    window.location = `https://h5.hnliantong.cn/mini/authorize/index?callback=${encodeURIComponent(window.location.href)}`
   } else {
     olert.show({ content: res.msg })
   }
@@ -94,7 +94,6 @@ export function encodeData(data) {
 
   const paramsNum = getRandom()
   const result = Object.assign({}, data)
-  console.log(result)
   for (let i = 0; i < paramsNum; i += 1) {
     result[randomStr(getRandom())] = randomStr(getRandom())
   }
@@ -108,7 +107,7 @@ export function encodeData(data) {
 
 export function checkAuth(cb) {
   $.get({
-    url: 'http://jhs.dochuang.cn/game/index/isAuthorize',
+    url: 'https://jhs.dochuang.cn/game/index/isAuthorize',
     xhrFields: {
       withCredentials: true
     },
@@ -133,7 +132,7 @@ export function checkAuth(cb) {
 export function bindMobile(mobile, cb) {
   setLoading('show')
   $.post({
-    url: 'http://jhs.dochuang.cn/game/index/bindMobile',
+    url: 'https://jhs.dochuang.cn/game/index/bindMobile',
     xhrFields: {
       withCredentials: true
     },
@@ -152,7 +151,7 @@ export function bindMobile(mobile, cb) {
 export function renderRank(cb) {
   setLoading('show')
   $.get({
-    url: 'http://jhs.dochuang.cn/game/index/rank',
+    url: 'https://jhs.dochuang.cn/game/index/rank',
     xhrFields: {
       withCredentials: true
     },
@@ -186,7 +185,7 @@ export function renderRank(cb) {
 export function postScore(score, cb) {
   setLoading('show')
   $.post({
-    url: 'http://jhs.dochuang.cn/game/index/playGame',
+    url: 'https://jhs.dochuang.cn/game/index/playGame',
     xhrFields: {
       withCredentials: true
     },
@@ -205,7 +204,7 @@ export function postScore(score, cb) {
 export function onShare() {
   setLoading('show')
   $.get({
-    url: 'http://jhs.dochuang.cn/game/index/shareAdd',
+    url: 'https://jhs.dochuang.cn/game/index/shareAdd',
     xhrFields: {
       withCredentials: true
     },

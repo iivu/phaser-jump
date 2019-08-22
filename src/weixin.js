@@ -20,7 +20,7 @@ function weixin(callback) {
     noncestr: wxNonceStr,
     url: window.location.href
   }
-  $.post('http://jhs.dochuang.cn/game/authorize/getApiTicket', wxData, function (res) {
+  $.post('https://jhs.dochuang.cn/game/authorize/getApiTicket', wxData, function (res) {
     onwxSignReady(res.data)
   })
 

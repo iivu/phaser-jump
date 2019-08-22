@@ -11,7 +11,7 @@ const extractSass = new ExtractTextPlugin({
 
 const MODE = process.env.MODE
 
-const publicPath = MODE === 'dev' ? '/' : 'http://img.cntapp.com/h5/zze/jump/'
+const publicPath = MODE === 'dev' ? '/' : 'https://jhs.dochuang.cn/h5/'
 
 module.exports = {
   entry: {
