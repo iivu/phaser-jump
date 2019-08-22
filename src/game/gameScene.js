@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import $ from 'jquery'
-import { WIN_WIDTH, WIN_HEIGHT } from './init'
+import { WIN_WIDTH, WIN_HEIGHT, game } from './init'
 import { get, set } from '../globalData'
 import { postScore } from '../utils'
 
@@ -37,6 +37,33 @@ const SPECIAL_PLATFORM = {
   167: 'c36',
   174: 'c37',
 }
+const COUNT_MAP_PLACE = {
+  7: '长沙',
+  14: '广州',
+  21: '上海',
+  28: '北京',
+  36: '台北',
+  43: '平壤',
+  50: '首尔',
+  57: '日本',
+  68: '泰国',
+  75: '马来西亚',
+  82: '新加坡',
+  89: '菲律宾',
+  96: '文莱',
+  103: '印尼',
+  110: '老挝',
+  117: '柬埔寨',
+  124: '越南',
+  131: '尼泊尔',
+  138: '不丹',
+  145: '斯里兰卡',
+  153: '印度',
+  160: '孟加拉',
+  167: '缅甸',
+  174: '巴基斯坦',
+}
+
 
 let background = null
 let platforms = null
@@ -63,6 +90,8 @@ let jumpAudio = null
 let isPostScore = false
 let plane = null
 let planeDirection = 1
+//玩家跳过的云数量
+let playerPassCount = 1
 
 //热气球和云碰撞回调
 function onPlayAndPlatformsCollider(player, platform, ctx) {
@@ -70,11 +99,16 @@ function onPlayAndPlatformsCollider(player, platform, ctx) {
   //如果跳到新的云
   if (player.body.touching.down) isJumping = false
   if ((platform.__id !== currentPlatformId) && player.body.touching.down) {
-    if(platformCount % 7 === 0) tweenPlane(ctx)
+    if (platformCount % 7 === 0) tweenPlane(ctx)
     //记录当前云的id
     currentPlatformId = platform.__id
     //反转跳跃x速度方向
     velocityXDirection *= -1
+    playerPassCount += 1
+    if (COUNT_MAP_PLACE[playerPassCount]) {
+      $('.city-modal .content').text(`恭喜您已到达${COUNT_MAP_PLACE[playerPassCount]}!`)
+      $('.city-modal').show()
+    }
     //记录分数
     noteScore()
     //移动背景和所有的云
@@ -87,7 +121,7 @@ function generatePlatformParams(isFirst = false) {
   const key = SPECIAL_PLATFORM[(platformCount + 1)] || Phaser.Utils.Array.GetRandom(NORMAL_PLATFORM)
   return [
     platformDirection === 1 ? 50 : WIN_WIDTH - (228 + 50),
-    isFirst ? WIN_HEIGHT - 250 : lastPlatformPos[1] - Math.ceil(Phaser.Math.Between(200, 400)),
+    isFirst ? WIN_HEIGHT - 300 : lastPlatformPos[1] - Math.ceil(Phaser.Math.Between(300, 450)),
     key,
   ]
 }
@@ -231,6 +265,8 @@ function resetGameData() {
   growPowerAudio = null
   jumpAudio = null
   isPostScore = false
+  planeDirection = 1
+  playerPassCount = 1
 }
 
 function showResult() {
@@ -257,6 +293,17 @@ function tweenPlane(ctx) {
   })
 }
 
+export function postScoreAndShowResult() {
+  postScore(score, () => {
+    reduceGameChance()
+    setTimeout(() => {
+      showResult()
+      resetGameData()
+      game.scene.start('overScene')
+    }, 500)
+  })
+}
+
 export default {
 
   key: 'gameScene',
@@ -264,11 +311,12 @@ export default {
   create: function () {
     background = this.add.image(0, WIN_HEIGHT, 'bg').setOrigin(0, 1)
     plane = this.add.image(WIN_WIDTH + 400, 600, 'plane')
+    plane.setFlipX(false)
     platforms = this.physics.add.group()
     for (let i = 0; i < 6; i += 1) {
       createPlatform(i === 0, this)
     }
-    player = this.physics.add.sprite(180, WIN_HEIGHT - 350, 'player').setSize(100, 60).setOffset(40, 174)
+    player = this.physics.add.sprite(180, WIN_HEIGHT - 400, 'player').setSize(100, 60).setOffset(40, 174)
     growPowerAudio = this.sound.add('grow_power')
     jumpAudio = this.sound.add('jump')
     currentPlayerPos = [180, WIN_HEIGHT - 350]
@@ -305,17 +353,17 @@ export default {
     //出界
     if (player.y > WIN_HEIGHT - 60 || player.y < -100 || player.x > WIN_WIDTH + 100 || player.x < -100) {
       this.scene.pause()
+      growPowerAudio.stop()
+      jumpAudio.stop()
+      powerTimer.remove()
       this.input.removeAllListeners()
       if (!isPostScore) {
         isPostScore = true
-        postScore(score, () => {
-          reduceGameChance()
-          setTimeout(() => {
-            showResult()
-            resetGameData()
-            this.scene.start('overScene')
-          }, 500)
-        })
+        if (get('isBindMobile') === 0) {
+          $('.mobile-auto-modal').show()
+        } else {
+          postScoreAndShowResult()
+        }
       }
     }
   },

@@ -4,7 +4,7 @@ import bindEvent from './events'
 import weixin from './weixin'
 import { inputBlurBugFix, checkAuth } from './utils'
 
-import './images/qr_code.png'
+import './images/qr_code.jpeg'
 
 checkAuth(() => {
   bindEvent()

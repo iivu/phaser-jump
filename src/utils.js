@@ -205,7 +205,7 @@ export function postScore(score, cb) {
 export function onShare() {
   setLoading('show')
   $.get({
-    url: 'http://jhs.dochuang.cn/game/index/shareAdd ',
+    url: 'http://jhs.dochuang.cn/game/index/shareAdd',
     xhrFields: {
       withCredentials: true
     },
@@ -215,6 +215,7 @@ export function onShare() {
       if (res.code === 200) {
         if (res.data.isAddNum === 1) {
           set('chance', get('chance') + 2)
+          $('.life-bar').text(get('chance'))
         }
       } else {
         checkResIsValid(res)

@@ -26,6 +26,7 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),
     host: '0.0.0.0',
+    port:8082
   },
   module: {
     rules: [{
@@ -60,7 +61,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
-    new ExtractTextPlugin('index.scss.css?[hash:5]'),
+    new ExtractTextPlugin('index.css?[hash:5]'),
     new UglifyJSPlugin(),
     new HtmlWebpackPlugin({
       filename: './index.html',

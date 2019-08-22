@@ -1,7 +1,8 @@
 import $ from 'jquery'
 import init, { game } from './game/init'
-import { get } from './globalData'
+import { get, set } from './globalData'
 import { olert, bindMobile, renderRank } from './utils'
+import { postScoreAndShowResult } from './game/gameScene'
 
 const $modal = $('.modal')
 const $shareModal = $('.share-modal')
@@ -10,8 +11,10 @@ function bgmControl() {
   const $voiceBar = $('.voice-bar')
   if ($voiceBar.hasClass('active')) {
     $voiceBar.removeClass('active')
+    $('.action-btn.voice').removeClass('active')
     $('.bgm')[0].pause()
   } else {
+    $('.action-btn.voice').addClass('active')
     $voiceBar.addClass('active')
     $('.bgm')[0].play()
   }
@@ -49,6 +52,8 @@ export default function bindEvent() {
 
   $('.rank-gift-modal .close').on('click', () => $('.rank-gift-modal').hide())
 
+  $('.no-chance-modal .close').on('click', () => $('.no-chance-modal').hide())
+
   $('.rules-bar').on('click', () => $('.rules-modal').show())
 
   $shareModal.on('click', () => $shareModal.hide())
@@ -73,11 +78,7 @@ export default function bindEvent() {
 
   $('.start-btn').on('click', () => {
     //initGame()
-    if (get('isBindMobile') === 0) {
-      $('.mobile-auto-modal').show()
-    } else {
-      checkChance()
-    }
+    checkChance()
   })
 
   $('.game-rules-modal .know-btn').on('click', () => $modal.hide())
@@ -92,7 +93,9 @@ export default function bindEvent() {
       olert.show({ content: '请填写合法的手机号' })
     } else {
       bindMobile(tel, () => {
-        checkChance()
+        set('isBindMobile', 1)
+        $('.mobile-auto-modal').hide()
+        postScoreAndShowResult()
       })
     }
   })
@@ -114,6 +117,10 @@ export default function bindEvent() {
   $('.rank-gift-modal .gift-tab').on('click', function () {
     if ($(this).hasClass('active')) return
     giftAndRankControl('gift')
+  })
+
+  $('.city-modal .confirm-button').on('click', function () {
+    $('.city-modal').hide()
   })
 
 }
