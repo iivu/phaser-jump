@@ -5,11 +5,13 @@ import weixin from './weixin'
 import { inputBlurBugFix, checkAuth } from './utils'
 
 import './images/qr_code.jpeg'
+import './images/post.jpeg'
 
 checkAuth(() => {
   bindEvent()
   inputBlurBugFix()
   weixin()
-})
+}, true)
+
 
 

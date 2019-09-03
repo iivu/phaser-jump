@@ -55,10 +55,10 @@
       <div class="wrap">
         <div class="title">活动规则</div>
         <div class="content">
-          <div>1、活动时间：2019年8月23-2019年9月1日</div>
-          <div>2、每个用户每天3次机会，分享一次可以额外获得2次机会。</div>
+          <div>1、活动时间：2019年9月23-2019年10月31日</div>
+          <div>2、每个用户每天5次机会，分享一次可以额外获得5次机会。每人每天上限10次游戏机会，每游戏5次可额外获得一次开宝箱领积分，抽取城市地图机会。</div>
           <div>3、每跳一个城市以1积分累加，如第一个城市1积分，第二个城市2积分不断累加。</div>
-          <div>4、活动截止后所有用户通过游戏获得的积分可以通过关注“集合时”公众号，今日积分商城兑换礼券（积分商城上线时间请关注公众号），游戏第一名有机会获得免费游。</div>
+          <div>4、每日游戏前三名可获得免费旅游大奖，所有玩家均可获得旅游抵用券。所有累计积分可在集合时小程序后台兑换相应奖励。具体积分兑换机制请关注集合时公众号。</div>
         </div>
         <div class="x"></div>
       </div>
@@ -72,14 +72,16 @@
         </div>
         <div class="rank content hide"></div>
         <div class="gift content hide">
-          <div class="gift-item-wrap">
-            <div class="gift-item">
-              <div class="gift-icon"></div>
-              <div>旅游套餐省内旅行5折券</div>
+          <div class="gift-item-ct">
+            <div class="gift-item-wrap">
+              <div class="gift-item gift1"></div>
+              <span>游戏5次</span>
+              <span>可解锁宝箱</span>
             </div>
-            <div class="gift-item">
-              <div class="gift-icon"></div>
-              <div>旅游套餐省内旅行5折券</div>
+            <div class="gift-item-wrap">
+              <div class="gift-item gift2"></div>
+              <span>分享朋友圈</span>
+              <span>享翻倍奖励</span>
             </div>
           </div>
           <div class="qr-code-wrap">
@@ -128,12 +130,21 @@
       </div>
     </div>
 
-    <div class="city-modal modal full-page hide">
+    <div class="git-result-modal modal full-page hide">
       <div class="wrap">
-        <div class="content"></div>
-        <div class="confirm-button"></div>
+        <div class="result"></div>
+        <div class="confirm-btn"></div>
       </div>
     </div>
+
+    <div class="post-modal modal full-page hide">
+      <div class="wrap">
+        <img class="post" src="./images/post.jpeg" alt="post"/>
+        <div class="post-x"></div>
+      </div>
+    </div>
+
+    <div class="city-tips hide"></div>
 
     <div id="game-wrap" class="hide"></div>
 
@@ -149,7 +160,7 @@
     <script>
       var wxShare = {
         img_url: 'http://img.cntapp.com/h5/zze/jump/share_image.jpeg',
-        link: 'http://h5.bukeyi.net/h5/zze/jump/index.html',
+        link: 'https://jhs.dochuang.cn/h5/index.html',
         title: '跳一跳',
         desc: '跳一跳'
       }

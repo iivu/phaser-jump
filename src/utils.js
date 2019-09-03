@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import anime from 'animejs'
 import md5 from './md5'
 import { set, get } from './globalData'
 
@@ -105,7 +106,8 @@ export function encodeData(data) {
   return result
 }
 
-export function checkAuth(cb) {
+export function checkAuth(cb, isFirst = false) {
+  setLoading('show')
   $.get({
     url: 'https://jhs.dochuang.cn/game/index/isAuthorize',
     xhrFields: {
@@ -113,16 +115,24 @@ export function checkAuth(cb) {
     },
     data: encodeData({}),
     success: function (res) {
+      setLoading('hide')
       if (res.data.isAuth === 0) {
         window.location = `http://jhs.dochuang.cn/game/authorize/index?callback=${encodeURIComponent(window.location.href)}`
       } else {
-        set('isBindMobile', res.data.isBindMobile)
-        set('totalScore', res.data.score)
-        set('chance', res.data.num)
-        $('.score-bar').text(res.data.score)
-        $('.life-bar').text(res.data.num)
-        $('.home').show()
-        $('.status-bar-wrap').show()
+        const gitStatus = { 0: '', 1: 'can-open', 2: 'opened' }
+        if (isFirst) {
+          set('isBindMobile', res.data.isBindMobile)
+          set('totalScore', res.data.score)
+          set('chance', res.data.num)
+          $('.score-bar').text(res.data.score)
+          $('.life-bar').text(res.data.num)
+          $('.home').show()
+          $('.status-bar-wrap').show()
+        }
+        set('firstBoxStatus', res.data.firstStatus)
+        set('secondBoxStatus', res.data.secondStatus)
+        $('.gift1').addClass(gitStatus[res.data.firstStatus])
+        $('.gift2').addClass(gitStatus[res.data.secondStatus])
         cb && cb()
       }
     }
@@ -213,9 +223,53 @@ export function onShare() {
       setLoading('hide')
       if (res.code === 200) {
         if (res.data.isAddNum === 1) {
-          set('chance', get('chance') + 2)
+          set('chance', get('chance') + 5)
           $('.life-bar').text(get('chance'))
         }
+      } else {
+        checkResIsValid(res)
+      }
+    }
+  })
+}
+
+export function showTheCityTips(text) {
+  $('.city-tips').text(`恭喜您已经到达${text}!`).show()
+  setTimeout(() => {
+    $('.city-tips').hide()
+  }, 2000)
+}
+
+export function openGiftAnimate(target, cb) {
+  anime({
+    targets: target,
+    duration: 1000,
+    backgroundPosition: [' -215px 0', '-860px 0'],
+    easing: 'steps(3)',
+    complete: function () {
+      cb && cb()
+    }
+  })
+}
+
+export function openBox(index, target, cb) {
+  setLoading('show')
+  $.get({
+    url: 'https://jhs.dochuang.cn/game/index/openBox',
+    xhrFields: {
+      withCredentials: true
+    },
+    data: encodeData({ index }),
+    success: function (res) {
+      const indexMap = { 1: 'firstBoxStatus', 2: 'secondBoxStatus' }
+      setLoading('hide')
+      if (res.code === 200) {
+        const currentTotalScore = get('totalScore')
+        set(indexMap[index], 2)
+        set('totalScore', currentTotalScore + res.data.score)
+        $('.git-result-modal .result').text(`恭喜您获得${res.data.score}积分`)
+        $('.score-bar').text(parseInt(get('totalScore'), 10))
+        openGiftAnimate(target, cb)
       } else {
         checkResIsValid(res)
       }

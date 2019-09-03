@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import $ from 'jquery'
 import { WIN_WIDTH, WIN_HEIGHT, game } from './init'
 import { get, set } from '../globalData'
-import { postScore } from '../utils'
+import { postScore, showTheCityTips } from '../utils'
 
 const NORMAL_PLATFORM = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7']
 const SPECIAL_PLATFORM = {
@@ -74,6 +74,7 @@ let platformCount = 0
 let platformDirection = 1
 let player = null
 let velocityY = 0
+let velocityX = 0
 let velocityXDirection = 1
 //蓄力计时器
 let powerTimer = null
@@ -92,6 +93,7 @@ let plane = null
 let planeDirection = 1
 //玩家跳过的云数量
 let playerPassCount = 1
+let playerCollider = null
 
 //热气球和云碰撞回调
 function onPlayAndPlatformsCollider(player, platform, ctx) {
@@ -105,9 +107,8 @@ function onPlayAndPlatformsCollider(player, platform, ctx) {
     //反转跳跃x速度方向
     velocityXDirection *= -1
     playerPassCount += 1
-    if (COUNT_MAP_PLACE[playerPassCount]) {
-      $('.city-modal .content').text(`恭喜您已到达${COUNT_MAP_PLACE[playerPassCount]}!`)
-      $('.city-modal').show()
+    if (platform.__name) {
+      showTheCityTips(platform.__name)
     }
     //记录分数
     noteScore()
@@ -120,35 +121,47 @@ function onPlayAndPlatformsCollider(player, platform, ctx) {
 function generatePlatformParams(isFirst = false) {
   const key = SPECIAL_PLATFORM[(platformCount + 1)] || Phaser.Utils.Array.GetRandom(NORMAL_PLATFORM)
   return [
-    platformDirection === 1 ? 50 : WIN_WIDTH - (228 + 50),
-    isFirst ? WIN_HEIGHT - 300 : lastPlatformPos[1] - Math.ceil(Phaser.Math.Between(300, 450)),
+    platformDirection === 1 ? Phaser.Math.Between(50, 80) : WIN_WIDTH - (228 + Phaser.Math.Between(50, 80)),
+    isFirst ? WIN_HEIGHT - 300 : lastPlatformPos[1] - Math.ceil(Phaser.Math.Between(200, 500)),
     key,
+    Math.random() * 0.4 + 0.8,
   ]
 }
 
 function createPlatform(isFirst = false, ctx) {
-  const [x, y, key] = generatePlatformParams(isFirst)
+  const [x, y, key, scale] = generatePlatformParams(isFirst)
   const platform = platforms.create(
     x, y, key
   ).setOrigin(0)
-  platform.setSize(180, 60).setOffset(20, 150)
+  platform.setSize(150, 60).setOffset(50, 150)
   platform.setImmovable(true)
+  platform.setScale(scale)
   platform.body.allowGravity = false
   platform.__id = platformId++
   platformDirection *= -1
   lastPlatformPos = [x, y]
   platformCount += 1
+  if (COUNT_MAP_PLACE[platformCount]) {
+    platform.__name = COUNT_MAP_PLACE[platformCount]
+  } else {
+    platform.__name = null
+  }
 }
 
 //重置在屏幕下方的云到新的位置
 function resetPlatform() {
   platforms.children.iterate(function (platform) {
     if (platform.y > WIN_HEIGHT - 100) {
-      const [x, y, key] = generatePlatformParams()
-      platform.setTexture(key).setPosition(x, y)
+      const [x, y, key, scale] = generatePlatformParams()
+      platform.setTexture(key).setPosition(x, y).setScale(scale)
       platformDirection *= -1
       lastPlatformPos = [x, y]
       platformCount += 1
+      if (COUNT_MAP_PLACE[platformCount]) {
+        platform.__name = COUNT_MAP_PLACE[platformCount]
+      } else {
+        platform.__name = null
+      }
     }
   })
 }
@@ -208,9 +221,9 @@ function scaleThePlayer(ctx) {
 //蓄力速度
 function growVelocityY(ctx) {
   powerTimer = ctx.time.addEvent({
-    delay: 50, loop: true, callback: function () {
-      velocityY -= 50
-      if (velocityY < -1350) velocityY = -1350
+      delay: 50, loop: true, callback: function () {
+      velocityY -= 150
+      // if (velocityY < -2000) velocityY = -2000
     }
   })
 }
@@ -221,7 +234,7 @@ function animatePlatform(ctx) {
     ctx.tweens.add({
       delay: index * 200,
       targets: platform,
-      x: platform.x + 10,
+      x: platform.x + 15,
       yoyo: true,
       loop: -1,
     })
@@ -254,6 +267,7 @@ function resetGameData() {
   platformDirection = 1
   player = null
   velocityY = 0
+  velocityX = 0
   velocityXDirection = 1
   powerTimer = null
   currentPlatformId = 0
@@ -321,7 +335,7 @@ export default {
     jumpAudio = this.sound.add('jump')
     currentPlayerPos = [180, WIN_HEIGHT - 350]
     animatePlatform(this)
-    this.physics.add.collider(player, platforms, (player, platform) => {
+    playerCollider = this.physics.add.collider(player, platforms, (player, platform) => {
       onPlayAndPlatformsCollider(player, platform, this)
     })
     this.input.on('pointerup', () => {
@@ -337,7 +351,7 @@ export default {
       }
       //清除蓄力速度
       powerTimer.remove()
-      player.body.setVelocity(250 * velocityXDirection, velocityY)
+      player.body.setVelocity(600 * velocityXDirection, velocityY)
       velocityY = 0
     })
     this.input.on('pointerdown', () => {
@@ -351,7 +365,7 @@ export default {
 
   update: function () {
     //出界
-    if (player.y > WIN_HEIGHT - 60 || player.y < -100 || player.x > WIN_WIDTH + 100 || player.x < -100) {
+    if (player.y > WIN_HEIGHT - 60 || player.y < 50 || player.x > WIN_WIDTH + 100 || player.x < -100) {
       this.scene.pause()
       growPowerAudio.stop()
       jumpAudio.stop()
@@ -366,6 +380,7 @@ export default {
         }
       }
     }
+    playerCollider.active = player.body.velocity.y >= 0
   },
 
 }

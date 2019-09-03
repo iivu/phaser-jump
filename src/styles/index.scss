@@ -287,7 +287,7 @@ body, html {
       color: #37220A;
 
       div {
-        margin-bottom: 50px;
+        margin-bottom: 30px;
       }
     }
   }
@@ -395,23 +395,33 @@ body, html {
       font-size: 28px;
       color: #EEE7CB;
 
-      .gift-item-wrap {
+      .gift-item-ct {
         display: flex;
         justify-content: center;
-        margin: 50px 0;
+        margin: 40px 0;
         flex-wrap: wrap;
 
-        .gift-item {
-          width: 170px;
+        .gift-item-wrap {
+          display: flex;
           flex-direction: column;
-          text-align: center;
-          margin: 0 15px;
-          @include flex-box(center, center);
+          justify-content: center;
+          align-items: center;
 
-          .gift-icon {
-            width: 157px;
-            height: 127px;
-            @include set-full-page-bg('../images/gif_icon.png');
+          .gift-item {
+            width: 215px;
+            height: 216px;
+            background-image: url('../images/box.png');
+            background-position: 0 0;
+            background-size: 1075px 100%;
+            background-repeat: no-repeat;
+
+            &.can-open {
+              background-position: -215px 0;
+            }
+
+            &.opened {
+              background-position: -860px 0;
+            }
           }
         }
       }
@@ -526,8 +536,8 @@ body, html {
     @include absolute-center();
     @include set-full-page-bg('../images/auth_mobile_wrap.png');
     width: 605px;
-    height: 423px;
-    padding-top: 150px;
+    height: 477px;
+    padding-top: 200px;
 
     .input-wrap {
       width: 500px;
@@ -565,31 +575,20 @@ body, html {
   }
 }
 
-.city-modal {
-  background-color: rgba(0, 0, 0, 0.6);
+.city-tips {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: 10;
-
-  .wrap {
-    padding: 210px 30px;
-    width: 605px;
-    height: 481px;
-    color: #fff;
-    text-align: center;
-    @include absolute-center();
-    @include set-full-page-bg('../images/modal_wrap2.png');
-
-    .content {
-      font-size: 45px;
-      font-weight: bold;
-    }
-
-    .confirm-button {
-      width: 254px;
-      height: 106px;
-      margin: 20px auto;
-      @include set-full-page-bg('../images/confirm_btn.png');
-    }
-  }
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: fade-in .3s forwards;
+  padding: 20px 30px;
+  border-radius: 8px;
+  font-size: 35px;
+  white-space: nowrap;
 }
 
 .loading-modal {
@@ -626,6 +625,54 @@ body, html {
   }
 }
 
+.git-result-modal {
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 50;
+
+  .wrap {
+    padding-top: 210px;
+    width: 605px;
+    height: 481px;
+    color: #fff;
+    text-align: center;
+    font-size: 45px;
+    font-weight: bold;
+    @include absolute-center();
+    @include set-full-page-bg('../images/modal_wrap2.png');
+
+    .confirm-btn {
+      width: 254px;
+      height: 106px;
+      @include set-full-page-bg('../images/confirm_btn.png');
+      margin: 30px auto;
+    }
+  }
+}
+
+.post-modal {
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+
+  .wrap {
+    @include absolute-center();
+
+    .post {
+      width: 650px;
+      height: 750px;
+    }
+
+    .post-x {
+      position: absolute;
+      width: 79px;
+      height: 79px;
+      @include set-full-page-bg('../images/x2.png');
+      left: 50%;
+      bottom: -100px;
+      margin-left: -41px;
+    }
+  }
+}
+
 @keyframes popup {
   from {
     transform: scale(1);
@@ -650,6 +697,12 @@ body, html {
 @keyframes rotate {
   to {
     transform: rotate3d(0, 0, 1, 360deg);
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
   }
 }
 

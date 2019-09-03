@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import init, { game } from './game/init'
 import { get, set } from './globalData'
-import { olert, bindMobile, renderRank } from './utils'
+import { olert, bindMobile, renderRank, openBox, checkAuth } from './utils'
 import { postScoreAndShowResult } from './game/gameScene'
 
 const $modal = $('.modal')
@@ -50,6 +50,10 @@ export default function bindEvent() {
 
   $('.x').on('click', () => $modal.hide())
 
+  $('.post-x').on('click', function () {
+    $('.post-modal').hide()
+  })
+
   $('.rank-gift-modal .close').on('click', () => $('.rank-gift-modal').hide())
 
   $('.no-chance-modal .close').on('click', () => $('.no-chance-modal').hide())
@@ -65,7 +69,7 @@ export default function bindEvent() {
   })
 
   $('.action-btn.gift').on('click', () => {
-    giftAndRankControl('gift')
+    checkAuth(() => giftAndRankControl('gift'))
   })
 
   $('.action-btn.rank').on('click', () => {
@@ -116,11 +120,35 @@ export default function bindEvent() {
 
   $('.rank-gift-modal .gift-tab').on('click', function () {
     if ($(this).hasClass('active')) return
-    giftAndRankControl('gift')
+    checkAuth(() => giftAndRankControl('gift'))
   })
 
   $('.city-modal .confirm-button').on('click', function () {
     $('.city-modal').hide()
+  })
+
+  $('.gift1').on('click', function () {
+    if (get('firstBoxStatus') === 1) {
+      openBox(1, this, () => {
+        $('.git-result-modal').show()
+        $('.post-modal').show()
+        $(this).removeClass('can-open opened').addClass('opened')
+      })
+    }
+  })
+
+  $('.gift2').on('click', function () {
+    if (get('secondBoxStatus') === 1) {
+      openBox(2, this, () => {
+        $('.git-result-modal').show()
+        $('.post-modal').show()
+        $(this).removeClass('can-open opened').addClass('opened')
+      })
+    }
+  })
+
+  $('.git-result-modal .confirm-btn').on('click', function () {
+    $('.git-result-modal').hide()
   })
 
 }
