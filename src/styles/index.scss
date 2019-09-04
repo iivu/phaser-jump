@@ -651,7 +651,7 @@ body, html {
 
 .post-modal {
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 200;
+  z-index: 40;
 
   .wrap {
     @include absolute-center();
