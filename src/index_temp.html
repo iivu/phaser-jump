@@ -55,9 +55,9 @@
       <div class="wrap">
         <div class="title">活动规则</div>
         <div class="content">
-          <div>1、活动时间：2019年9月23-2019年10月31日</div>
+          <div>1、活动时间：2019年10月12-2019年11月11日</div>
           <div>2、每个用户每天5次机会，分享一次可以额外获得5次机会。每人每天上限10次游戏机会，每游戏5次可额外获得一次开宝箱领积分，抽取城市地图机会。</div>
-          <div>3、每跳一个城市以1积分累加，如第一个城市1积分，第二个城市2积分不断累加。</div>
+          <div>3、每跳一个城市以1里程累加，如第一个城市1里程，第二个城市2里程不断累加。（里程会按照一定比例兑换成积分）</div>
           <div>4、每日游戏前三名可获得免费旅游大奖，所有玩家均可获得旅游抵用券。所有累计积分可在集合时小程序后台兑换相应奖励。具体积分兑换机制请关注集合时公众号。</div>
           <div>5、总积分前十名可以获得和刘彬濠一起出行酷狗音乐节的免费机会。</div>
         </div>
@@ -96,7 +96,7 @@
 
     <div class="result-modal modal full-page hide">
       <div class="wrap">
-        <div class="current-score">您获得积分</div>
+        <div class="current-score">您获得里程</div>
         <div class="total-score">您当前总积分：</div>
         <div class="action-wrap">
           <div class="rank-action"></div>
@@ -156,12 +156,14 @@
       </div>
     </div>
 
-    <audio src="https://jhs.dochuang.cn/h5/bgm.mp3" loop class="bgm"></audio>
+    <audio src="https://jhs-test.vsene.cn/h5/bgm.mp3" loop class="bgm"></audio>
 
     <script>
       var wxShare = {
-        img_url: 'http://jhs.dochuang.cn/h5/share_image.jpeg?v=2',
-        link: 'https://jhs.dochuang.cn/h5/index.html',
+        // img_url: 'http://jhs.dochuang.cn/h5/share_image.jpeg?v=2',
+        // link: 'https://jhs.dochuang.cn/h5/index.html',
+        img_url: 'http://jhs-test.vsene.cn/h5/share_image.jpeg?v=2',
+        link: 'https://jhs-test.vsene.cn/h5/index.html',
         title: '跳一跳，又又又来了！',
         desc: '每天送出一份全免出国旅行机会！'
       }

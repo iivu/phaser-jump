@@ -2,6 +2,7 @@ import $ from 'jquery'
 import anime from 'animejs'
 import md5 from './md5'
 import { set, get } from './globalData'
+import config from './config'
 
 function Olert() {
   this.wrap = null
@@ -68,7 +69,7 @@ export function inputBlurBugFix() {
 
 export function checkResIsValid(res) {
   if (res.code === 10103 || res.code === 10108) {
-    window.location = `https://h5.hnliantong.cn/mini/authorize/index?callback=${encodeURIComponent(window.location.href)}`
+    window.location = `${config.domain}/game/authorize/index?callback=${encodeURIComponent(window.location.href)}`
   } else {
     olert.show({ content: res.msg })
   }
@@ -101,7 +102,7 @@ export function encodeData(data) {
   const sortKeys = Object.keys(result).sort()
   sortKeys.forEach((key, index) => sortKeys[index] = `${key}=${result[key]}`)
   let dataStr = sortKeys.join('&')
-  dataStr += `&key=YWDZXe85sifGoFzoTVxvl3VLOVGtoDZV`
+  dataStr += `&key=LAAvXSOYZfFq6fQNyT7D8uyqLPkzikVV`
   result.sign = md5(dataStr).toUpperCase()
   return result
 }
@@ -109,7 +110,7 @@ export function encodeData(data) {
 export function checkAuth(cb, isFirst = false) {
   setLoading('show')
   $.get({
-    url: 'https://jhs.dochuang.cn/game/index/isAuthorize',
+    url: `${config.domain}/game/index/isAuthorize`,
     xhrFields: {
       withCredentials: true
     },
@@ -117,7 +118,7 @@ export function checkAuth(cb, isFirst = false) {
     success: function (res) {
       setLoading('hide')
       if (res.data.isAuth === 0) {
-        window.location = `http://jhs.dochuang.cn/game/authorize/index?callback=${encodeURIComponent(window.location.href)}`
+        window.location = `${config.domain}/game/authorize/index?callback=${encodeURIComponent(window.location.href)}`
       } else {
         const gitStatus = { 0: '', 1: 'can-open', 2: 'opened' }
         if (isFirst) {
@@ -142,7 +143,7 @@ export function checkAuth(cb, isFirst = false) {
 export function bindMobile(mobile, cb) {
   setLoading('show')
   $.post({
-    url: 'https://jhs.dochuang.cn/game/index/bindMobile',
+    url: `${config.domain}/game/index/bindMobile`,
     xhrFields: {
       withCredentials: true
     },
@@ -161,7 +162,7 @@ export function bindMobile(mobile, cb) {
 export function renderRank(cb) {
   setLoading('show')
   $.get({
-    url: 'https://jhs.dochuang.cn/game/index/rank',
+    url: `${config.domain}/game/index/rank`,
     xhrFields: {
       withCredentials: true
     },
@@ -195,7 +196,7 @@ export function renderRank(cb) {
 export function postScore(score, cb) {
   setLoading('show')
   $.post({
-    url: 'https://jhs.dochuang.cn/game/index/playGame',
+    url: `${config.domain}/game/index/playGame`,
     xhrFields: {
       withCredentials: true
     },
@@ -203,7 +204,7 @@ export function postScore(score, cb) {
     success: function (res) {
       setLoading('hide')
       if (res.code === 200) {
-        cb && cb()
+        cb && cb(res.data.totalScore)
       } else {
         checkResIsValid(res)
       }
@@ -214,7 +215,7 @@ export function postScore(score, cb) {
 export function onShare() {
   setLoading('show')
   $.get({
-    url: 'https://jhs.dochuang.cn/game/index/shareAdd',
+    url: `${config.domain}/game/index/shareAdd`,
     xhrFields: {
       withCredentials: true
     },
@@ -255,7 +256,7 @@ export function openGiftAnimate(target, cb) {
 export function openBox(index, target, cb) {
   setLoading('show')
   $.get({
-    url: 'https://jhs.dochuang.cn/game/index/openBox',
+    url: `${config.domain}/game/index/openBox`,
     xhrFields: {
       withCredentials: true
     },
@@ -270,6 +271,28 @@ export function openBox(index, target, cb) {
         $('.git-result-modal .result').text(`恭喜您获得${res.data.score}积分`)
         $('.score-bar').text(parseInt(get('totalScore'), 10))
         openGiftAnimate(target, cb)
+      } else {
+        checkResIsValid(res)
+      }
+    }
+  })
+}
+
+//查看是否还有机会
+export function checkShareChance() {
+  $.get({
+    url: `${config.domain}/game/index/userStatus`,
+    xhrFields: {
+      withCredentials: true
+    },
+    data: encodeData({}),
+    success: function (res) {
+      if (res.code === 200) {
+        if (res.data.isAllUse === 0) {
+          setTimeout(() => checkShareChance(), 2000)
+        } else {
+          set('chance', get('chance') + res.data.num)
+        }
       } else {
         checkResIsValid(res)
       }

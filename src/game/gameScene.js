@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import $ from 'jquery'
 import { WIN_WIDTH, WIN_HEIGHT, game } from './init'
 import { get, set } from '../globalData'
-import { postScore, showTheCityTips } from '../utils'
+import { postScore, showTheCityTips, checkShareChance } from '../utils'
 
 const NORMAL_PLATFORM = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7']
 const SPECIAL_PLATFORM = {
@@ -63,7 +63,6 @@ const COUNT_MAP_PLACE = {
   167: '缅甸',
   174: '巴基斯坦',
 }
-
 
 let background = null
 let platforms = null
@@ -221,7 +220,7 @@ function scaleThePlayer(ctx) {
 //蓄力速度
 function growVelocityY(ctx) {
   powerTimer = ctx.time.addEvent({
-      delay: 50, loop: true, callback: function () {
+    delay: 50, loop: true, callback: function () {
       velocityY -= 150
       // if (velocityY < -2000) velocityY = -2000
     }
@@ -245,7 +244,7 @@ function animatePlatform(ctx) {
 function noteScore() {
   const totalScore = get('totalScore')
   score += nextScore
-  $('.score-bar').text(parseInt(totalScore + nextScore, 10))
+  //$('.score-bar').text(parseInt(totalScore + nextScore, 10))
   set('totalScore', totalScore + nextScore)
   nextScore += 1
 }
@@ -255,6 +254,9 @@ function reduceGameChance() {
   const chance = get('chance')
   $('.life-bar').text(parseInt(chance - 1, 10))
   set('chance', chance - 1)
+  if (get('chance') === 0) {
+    checkShareChance()
+  }
 }
 
 //重置游戏数据
@@ -283,9 +285,10 @@ function resetGameData() {
   playerPassCount = 1
 }
 
-function showResult() {
-  $('.result-modal .current-score').text(`您获得${score}积分`)
-  $('.result-modal .total-score').text(`您当前总积分：${get('totalScore')}`)
+function showResult(totalScore) {
+  $('.result-modal .current-score').text(`您获得${score}里程`)
+  $('.result-modal .total-score').text(`您当前总积分：${totalScore}`)
+  $('.score-bar').text(totalScore)
   $('.result-modal').show()
 }
 
@@ -308,10 +311,10 @@ function tweenPlane(ctx) {
 }
 
 export function postScoreAndShowResult() {
-  postScore(score, () => {
+  postScore(score, totalScore => {
     reduceGameChance()
     setTimeout(() => {
-      showResult()
+      showResult(totalScore)
       resetGameData()
       game.scene.start('overScene')
     }, 500)

@@ -20,6 +20,7 @@ function weixin(callback) {
     noncestr: wxNonceStr,
     url: window.location.href
   }
+
   $.post('https://jhs.dochuang.cn/game/authorize/getApiTicket', wxData, function (res) {
     onwxSignReady(res.data)
   })
@@ -67,6 +68,7 @@ function weixin(callback) {
     })
 
   })
+  
 }
 
 export default weixin
